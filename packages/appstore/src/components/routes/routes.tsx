@@ -11,18 +11,16 @@ const TradersHub = React.lazy(() => import(/* webpackChunkName: "modules-traders
 const TradersHubLoggedOut = React.lazy(
     () => import(/* webpackChunkName: "modules-traders-hub-logged-out" */ 'Modules/traders-hub-logged-out')
 );
-const Wallets = React.lazy(() => import(/* webpackChunkName: "wallets" */ '@deriv/wallets'));
 
 const Routes: React.FC = observer(() => {
     const { client } = useStore();
-    const { is_logged_in, is_logging_in, has_wallet } = client;
+    const { is_logged_in, is_logging_in } = client;
 
     const title_TH = localize("Trader's Hub");
     const title_TH_logged_out = localize('Deriv App');
 
     const componentToRender = () => {
         if (is_logged_in || is_logging_in) {
-            if (has_wallet) return Wallets;
             return TradersHub;
         }
         return TradersHubLoggedOut;

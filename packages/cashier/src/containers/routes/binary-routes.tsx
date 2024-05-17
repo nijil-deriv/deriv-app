@@ -5,6 +5,8 @@ import getRoutesConfig from 'Constants/routes-config';
 import RouteWithSubRoutes from './route-with-sub-routes';
 import { useFeatureFlags } from '@deriv/hooks';
 import { routes } from '@deriv/shared';
+import { useStore } from '@deriv/stores';
+import Page404 from 'Components/page-404';
 
 type TBinaryRoutesProps = {
     is_logged_in: boolean;
@@ -30,6 +32,8 @@ const cashierV2RoutesConfig = {
 const BinaryRoutes = (props: TBinaryRoutesProps) => {
     const { is_p2p_v2_enabled } = useFeatureFlags();
     const [routesConfig, setRoutesConfig] = React.useState(getRoutesConfig());
+    const { client } = useStore();
+    const { has_wallet } = client;
 
     useEffect(() => {
         const isRouteAdded = (routePath: string) => routesConfig[0].routes?.some(route => route.path === routePath);
@@ -42,6 +46,8 @@ const BinaryRoutes = (props: TBinaryRoutesProps) => {
             setRoutesConfig(routes_replicate);
         }
     }, [is_p2p_v2_enabled, routesConfig]);
+
+    if (has_wallet) return <Page404 />;
 
     return (
         <React.Suspense fallback={<Loading />}>
