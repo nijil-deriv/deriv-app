@@ -1,5 +1,5 @@
 import React, { lazy } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import { Loader } from '../components/Loader';
 
 const LazyWalletsListingRoute = lazy(
