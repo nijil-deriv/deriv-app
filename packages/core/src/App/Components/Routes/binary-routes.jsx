@@ -1,6 +1,7 @@
 import React from 'react';
 import { Switch, Prompt, useLocation } from 'react-router-dom';
 import { Loading } from '@deriv/components';
+import { localize } from '@deriv/translations';
 import getRoutesConfig from 'App/Constants/routes-config';
 import RouteWithSubRoutes from './route-with-sub-routes.jsx';
 import { observer, useStore } from '@deriv/stores';
@@ -25,7 +26,7 @@ const Page404 = React.lazy(() => import(/* webpackChunkName: "404" */ 'Modules/P
 
 const BinaryRoutes = observer(props => {
     const { client, ui, gtm } = useStore();
-    const { has_wallet } = client;
+    const { has_wallet, is_logged_in, is_logging_in } = client;
     const { promptFn, prompt_when } = ui;
     const { pushDataLayer } = gtm;
     const location = useLocation();
@@ -34,7 +35,8 @@ const BinaryRoutes = observer(props => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location]);
 
-    // if (!client.loginid) return <div>LOADING</div>;
+    const title_TH = localize("Trader's Hub");
+    const title_TH_logged_out = localize('Deriv App');
 
     return (
         <React.Suspense fallback={<Loading />}>
@@ -48,7 +50,7 @@ const BinaryRoutes = observer(props => {
                     component={has_wallet ? Wallets : AppStore}
                     exact={!has_wallet}
                     passthrough={props.passthrough}
-                    // getTitle={() => (is_logged_in || is_logging_in ? title_TH : title_TH_logged_out)}
+                    getTitle={() => (is_logged_in || is_logging_in ? title_TH : title_TH_logged_out)}
                 />
                 {/* For default page route if page/path is not found, must be kept at the end of routes_config array */}
                 <RouteWithSubRoutes component={Page404} />
